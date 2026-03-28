@@ -40,7 +40,7 @@ Para rodar o projeto localmente, siga os passos abaixo:
 1.  **Clone o repositório:**
 
     ```bash
-    git clone https://github.com/seu-usuario/garagem-de-bolso.git
+    git clone https://github.com/EsmeraldoCarneiro/Garagem-de-Bolso.git
     ```
 
 2.  **Entre na pasta do projeto:**
