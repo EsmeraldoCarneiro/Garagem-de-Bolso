@@ -101,8 +101,7 @@ export default function Dashboard() {
   return (
     <div className="dashboard-container">
       <header className="dash-header">
-        <h2 className="logo-text">Garagem de Bolso</h2>
-        <span>ID: {auth.currentUser?.email}</span>
+        <h2 className="logo-text">Garagem de Bolso</h2>        
         <div className="header-nav">
           <Link to="/financas" className="nav-link">💰 Meus Ativos</Link>
           <button className="btn-logout" onClick={() => auth.signOut()}>Sair</button>
