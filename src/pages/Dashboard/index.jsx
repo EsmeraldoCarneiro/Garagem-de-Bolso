@@ -25,14 +25,28 @@ export default function Dashboard() {
   const series = ["Mainline", ...seriesRaras, "Premium", "Exclusive"];
 
   useEffect(() => {
-    if (!auth.currentUser) return;
-    const q = query(collection(db, "carrinhos"), where("userId", "==", auth.currentUser.uid));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const docs = [];
-      querySnapshot.forEach((doc) => { docs.push({ id: doc.id, ...doc.data() }); });
-      setCarrinhos(docs.sort((a, b) => b.createdAt?.seconds - a.createdAt?.seconds));
+    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
+      if (user) {
+        const q = query(
+          collection(db, "carrinhos"), 
+          where("userId", "==", user.uid)
+        );
+
+        const unsubscribeSnapshot = onSnapshot(q, (querySnapshot) => {
+          const docs = [];
+          querySnapshot.forEach((doc) => {
+            docs.push({ id: doc.id, ...doc.data() });
+          });
+          setCarrinhos(docs.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)));
+        });
+
+        return () => unsubscribeSnapshot();
+      } else {
+        setCarrinhos([]);
+      }
     });
-    return () => unsubscribe();
+
+    return () => unsubscribeAuth();
   }, []);
 
   const handleSaveCar = async (e) => {
@@ -48,7 +62,11 @@ export default function Dashboard() {
         setIsEditing(false);
         setEditId(null);
       } else {
-        await addDoc(collection(db, "carrinhos"), { ...dataToSave, userId: auth.currentUser.uid, createdAt: new Date() });
+        await addDoc(collection(db, "carrinhos"), { 
+          ...dataToSave, 
+          userId: auth.currentUser.uid, 
+          createdAt: new Date() 
+        });
       }
       setFormData(initialFormState);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -70,7 +88,10 @@ export default function Dashboard() {
 
   const carrinhosFiltrados = carrinhos.filter(car => {
     const term = searchTerm.toLowerCase();
-    const matches = car.modelo.toLowerCase().includes(term) || car.marca.toLowerCase().includes(term) || car.fabricante.toLowerCase().includes(term); // <--- Adicionamos esta linha;
+    const matches = (car.modelo?.toLowerCase() || "").includes(term) || 
+                    (car.marca?.toLowerCase() || "").includes(term) || 
+                    (car.fabricante?.toLowerCase() || "").includes(term);
+    
     if (activeFilter === 'loose') return matches && car.isLoose;
     if (activeFilter === 'blister') return matches && !car.isLoose;
     if (activeFilter === 'rare') return matches && seriesRaras.includes(car.serie);
@@ -81,13 +102,13 @@ export default function Dashboard() {
     <div className="dashboard-container">
       <header className="dash-header">
         <h2 className="logo-text">Garagem de Bolso</h2>
+        <span>ID: {auth.currentUser?.email}</span>
         <div className="header-nav">
           <Link to="/financas" className="nav-link">💰 Meus Ativos</Link>
           <button className="btn-logout" onClick={() => auth.signOut()}>Sair</button>
         </div>
       </header>
 
-      {/* Stats Simples na Home */}
       <section className="stats-container">
         <div className="stat-card">
           <span className="stat-label">Minis</span>
@@ -152,7 +173,12 @@ export default function Dashboard() {
       <main className="collection-section">
         <div className="collection-header">
            <div className="header-top-row">
-            <h3 className="section-title">Minha Coleção ({carrinhosFiltrados.length})</h3>
+            {/* AJUSTE AQUI: O título só mostra números se houver busca ou filtro ativo */}
+            <h3 className="section-title">
+              {searchTerm || activeFilter !== 'all' 
+                ? `Resultados (${carrinhosFiltrados.length})` 
+                : "Minha Coleção"}
+            </h3>
             <input type="text" placeholder="Buscar..." className="search-input" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
           </div>
           <div className="filter-tags">

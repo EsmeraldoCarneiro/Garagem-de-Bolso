@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { auth } from '../../config/firebase';
 import { 
   signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword 
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail // Importado para recuperação de senha
 } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom'; // 1. Importação necessária
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
 export default function Login() {
@@ -13,7 +14,7 @@ export default function Login() {
   const [isRegistering, setIsRegistering] = useState(false);
   const [error, setError] = useState('');
   
-  const navigate = useNavigate(); // 2. Inicialização do navegador
+  const navigate = useNavigate();
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -21,17 +22,32 @@ export default function Login() {
     
     try {
       if (isRegistering) {
-        // Criar conta nova
         await createUserWithEmailAndPassword(auth, email, password);
         alert('Conta criada com sucesso! Bem-vindo à Garagem!');
-        navigate('/dashboard'); // 3. Direciona após criar conta
+        navigate('/dashboard');
       } else {
-        // Fazer login
         await signInWithEmailAndPassword(auth, email, password);
-        navigate('/dashboard'); // 4. Direciona após fazer login
+        navigate('/dashboard');
       }
     } catch (err) {
       setError('Erro: Verifique suas credenciais ou conexão.');
+      console.error(err.code);
+    }
+  };
+
+  // Nova função para esqueci minha senha
+  const handleForgotPassword = async () => {
+    if (!email) {
+      setError('Digite seu e-mail no campo acima para recuperar a senha.');
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      alert('E-mail de redefinição enviado! Verifique sua caixa de entrada.');
+      setError(''); // Limpa erros anteriores
+    } catch (err) {
+      setError('Erro ao enviar e-mail de recuperação.');
       console.error(err.code);
     }
   };
@@ -56,8 +72,15 @@ export default function Login() {
           placeholder="Sua senha (mín. 6 caracteres)" 
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required 
+          required={!isRegistering || isRegistering} 
         />
+
+        {/* Link de recuperação (só aparece no modo Login) */}
+        {!isRegistering && (
+          <p className="forgot-password-link" onClick={handleForgotPassword}>
+            Esqueceu sua senha?
+          </p>
+        )}
 
         <button type="submit" className="btn-main">
           {isRegistering ? 'Cadastrar' : 'Entrar'}
