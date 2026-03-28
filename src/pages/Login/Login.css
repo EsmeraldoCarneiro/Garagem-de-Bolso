@@ -1,0 +1,94 @@
+/* src/pages/Login/Login.css */
+.login-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #121212; /* Fundo escuro */
+  padding: 20px;
+}
+
+.login-form {
+  background: #1e1e1e; /* Fundo do formulário ligeiramente mais claro */
+  padding: 40px;
+  border-radius: 12px;
+  /* Sombra com toque de laranja */
+  box-shadow: 0 8px 30px rgba(255, 159, 67, 0.2); 
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  border: 1px solid #333;
+}
+
+h2 {
+  /* Título em degradê Vermelho-Laranja-Amarelo */
+  background: linear-gradient(90deg, #ff4757 0%, #ff9f43 50%, #feca57 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 25px;
+  font-size: 2rem;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #2a2a2a;
+  color: white;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+/* Destaque do input ao clicar (Laranja) */
+input:focus {
+  outline: none;
+  border-color: #ff9f43; 
+}
+
+.btn-main {
+  width: 100%;
+  padding: 12px;
+  /* Botão principal com degradê Laranja-Vermelho */
+  background: linear-gradient(45deg, #ff9f43 0%, #ff4757 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
+}
+
+.btn-main:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(255, 71, 87, 0.5);
+}
+
+.btn-main:active {
+  transform: translateY(1px);
+}
+
+.error-message {
+  color: #ff6b6b; /* Mantemos o vermelho para erro */
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  background-color: rgba(255, 107, 107, 0.1);
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.toggle-auth {
+  margin-top: 25px;
+  color: #ccc; /* Texto mais claro para o link */
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.toggle-auth:hover {
+  color: #feca57; /* Amarelo no hover para destacar */
+  text-decoration: underline;
+}

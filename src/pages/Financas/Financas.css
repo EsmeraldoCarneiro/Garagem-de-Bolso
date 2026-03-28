@@ -1,0 +1,28 @@
+.financas-container { padding: 30px; background-color: #0d0d0d; min-height: 100vh; color: #fff; font-family: sans-serif; }
+.financas-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.btn-back { text-decoration: none; color: #ff9f43; font-weight: bold; font-size: 0.9rem; }
+
+.finance-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px; }
+.f-card { background: #1a1a1a; padding: 20px; border-radius: 12px; border-left: 4px solid #333; }
+.f-label { font-size: 0.7rem; color: #888; text-transform: uppercase; display: block; margin-bottom: 5px; }
+.f-value { font-size: 1.5rem; font-weight: 800; }
+
+.f-card.highlight { border-left-color: #feca57; }
+.f-card.profit { border-left-color: #85bb65; }
+.f-card.positive { border-left-color: #48dbfb; }
+
+.top-brands-list { font-size: 0.8rem; color: #ccc; margin-top: 5px; }
+.top-brands-list span { display: flex; justify-content: space-between; border-bottom: 1px solid #252525; padding: 2px 0; }
+.top-brands-list strong { color: #ff9f43; }
+
+.table-section { background: #1a1a1a; border-radius: 12px; border: 1px solid #333; overflow-x: auto; }
+.finance-table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
+.finance-table th { padding: 15px; font-size: 0.8rem; color: #777; text-transform: uppercase; background: #222; }
+.finance-table td { padding: 15px; border-bottom: 1px solid #252525; font-size: 0.9rem; }
+
+.txt-green { color: #85bb65; font-weight: bold; }
+.txt-cyan { color: #48dbfb; font-weight: bold; }
+.txt-grey { color: #888; }
+.txt-red { color: #ff4757; }
+
+@media (max-width: 768px) { .f-value { font-size: 1.2rem; } }
